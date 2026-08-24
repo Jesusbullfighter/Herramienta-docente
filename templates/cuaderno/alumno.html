@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block titulo %}{{ informe.nombre_completo }}{% endblock %}
+{% block contenido %}
+<h1>{{ informe.nombre_completo }}</h1>
+{% if informe.email %}<p>{{ informe.email }}</p>{% endif %}
+<a class="btn secundario" href="{{ url_for('cuaderno.detalle', slug=slug) }}">← Volver al cuaderno</a>
+
+<div class="card">
+  <h2>Nota final</h2>
+  <p class="stat-final {{ 'aprobado' if informe.nota_final and informe.nota_final >= 5 else 'suspenso' if informe.nota_final is not none else '' }}" style="font-size:1.6rem;">
+    {{ informe.nota_final if informe.nota_final is not none else "Sin datos suficientes" }}
+  </p>
+</div>
+
+{% for bloque in informe.detalle_por_evaluacion %}
+<div class="card">
+  <h2>{{ bloque.evaluacion.label }}</h2>
+  {% if bloque.encontrado %}
+    <table>
+      <tr><th>Actividad</th><th>Nota</th></tr>
+      {% for nombre_actividad, nota in bloque.notas.items() %}
+      <tr><td>{{ nombre_actividad }}</td><td>{{ nota }}</td></tr>
+      {% endfor %}
+    </table>
+    <p><strong>Media de esta evaluación:</strong> {{ bloque.media if bloque.media is not none else "—" }}</p>
+    {% if bloque.total_moodle is not none %}
+    <p class="ayuda">Total registrado en Moodle para esta evaluación: {{ bloque.total_moodle }}</p>
+    {% endif %}
+  {% else %}
+    <p class="ayuda">Este alumno no aparece en el archivo importado de esta evaluación.</p>
+  {% endif %}
+</div>
+{% endfor %}
+{% endblock %}

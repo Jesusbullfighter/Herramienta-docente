@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block titulo %}Herramienta Docente{% endblock %}
+{% block contenido %}
+<h1>Herramienta Docente</h1>
+<p>Optimiza la preparación de tus clases: genera materiales interactivos y cuestionarios listos
+para Moodle, y lleva un cuaderno de evaluación a partir de las notas exportadas de Moodle.</p>
+
+{% if not ai_configurado %}
+<div class="aviso-config">
+  <strong>Falta configurar la IA.</strong> Copia <code>.env.example</code> a <code>.env</code> y añade tu
+  clave gratuita de la API de Gemini (GEMINI_API_KEY, se crea en
+  <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>)
+  para poder generar materiales y cuestionarios. El cuaderno de evaluación funciona sin esta clave.
+</div>
+{% endif %}
+
+<div class="grid-modulos">
+  <a class="card card-link" href="{{ url_for('materiales.formulario') }}">
+    <h2>📘 Materiales interactivos</h2>
+    <p>A partir de un texto, PDF, Word o una URL, genera una lección interactiva (con términos
+    clave y autoevaluaciones) y descárgala como paquete SCORM para importar en Moodle.</p>
+  </a>
+  <a class="card card-link" href="{{ url_for('cuestionarios.formulario') }}">
+    <h2>📝 Cuestionarios autoevaluables</h2>
+    <p>Genera baterías de preguntas (opción múltiple, verdadero/falso, respuesta corta, completar
+    huecos, emparejamiento), revísalas y expórtalas como Moodle XML.</p>
+  </a>
+  <a class="card card-link" href="{{ url_for('cuaderno.listado') }}">
+    <h2>📊 Cuaderno de evaluación</h2>
+    <p>Importa las hojas de calificaciones exportadas de Moodle por evaluación y obtén informes
+    individualizados y la nota final de cada alumno.</p>
+  </a>
+</div>
+{% endblock %}

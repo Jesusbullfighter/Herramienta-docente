@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block titulo %}Revisar cuestionario{% endblock %}
+{% block contenido %}
+<h1>Revisa y edita el cuestionario</h1>
+<p>Se han generado <strong id="contador-preguntas">{{ preguntas|length }}</strong> preguntas.
+Edita lo que necesites, elimina las que no te sirvan o añade preguntas manuales antes de exportar.</p>
+
+<form id="form-exportar" method="post" action="{{ url_for('cuestionarios.exportar') }}">
+  <input type="hidden" name="categoria" value="{{ categoria }}">
+  <input type="hidden" name="preguntas_json" id="preguntas_json">
+
+  <div id="preguntas-container"></div>
+
+  <div class="card">
+    <h2>Añadir pregunta manual</h2>
+    <div class="checkbox-lista">
+      {% for clave, etiqueta in tipos.items() %}
+      <button type="button" class="btn secundario anadir-tipo" data-tipo="{{ clave }}">+ {{ etiqueta }}</button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <button class="btn" type="submit">Exportar a Moodle XML</button>
+  <a class="btn secundario" href="{{ url_for('cuestionarios.formulario') }}">Generar otro cuestionario</a>
+</form>
+
+<script>
+  window.PREGUNTAS_INICIALES = {{ preguntas | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/cuestionarios.js') }}"></script>
+{% endblock %}

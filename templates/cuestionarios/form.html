@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block titulo %}Cuestionarios autoevaluables{% endblock %}
+{% block contenido %}
+<h1>Generar cuestionario</h1>
+<p>Aporta el contenido de partida y elige los tipos de pregunta. Podrás revisar y editar cada
+pregunta antes de exportarla a Moodle.</p>
+
+<form class="card" method="post" action="{{ url_for('cuestionarios.generar') }}" enctype="multipart/form-data">
+  <input type="hidden" name="origen" id="origen-seleccionado" value="texto">
+
+  <label>Origen del contenido</label>
+  <div class="tabs-origen">
+    <button type="button" data-origen="texto">Pegar texto</button>
+    <button type="button" data-origen="pdf">Subir PDF</button>
+    <button type="button" data-origen="docx">Subir Word</button>
+    <button type="button" data-origen="url">Desde una URL</button>
+  </div>
+
+  <div class="origen-panel" data-origen="texto">
+    <textarea name="texto" placeholder="Pega aquí el contenido sobre el que quieres preguntar"></textarea>
+  </div>
+  <div class="origen-panel" data-origen="pdf">
+    <input type="file" name="archivo" accept=".pdf">
+  </div>
+  <div class="origen-panel" data-origen="docx">
+    <input type="file" name="archivo" accept=".docx">
+  </div>
+  <div class="origen-panel" data-origen="url">
+    <input type="url" name="url" placeholder="https://...">
+  </div>
+
+  <fieldset>
+    <legend>Parámetros del cuestionario</legend>
+    <label for="nivel">Nivel educativo</label>
+    <input type="text" id="nivel" name="nivel" placeholder="p.ej. 4º ESO">
+
+    <label for="asignatura">Asignatura / categoría en Moodle</label>
+    <input type="text" id="asignatura" name="asignatura" placeholder="p.ej. Historia - Tema 5">
+
+    <label for="num_preguntas">Número de preguntas</label>
+    <input type="number" id="num_preguntas" name="num_preguntas" value="10" min="1" max="40">
+
+    <label for="dificultad">Dificultad</label>
+    <select id="dificultad" name="dificultad">
+      <option value="baja">Baja</option>
+      <option value="media" selected>Media</option>
+      <option value="alta">Alta</option>
+    </select>
+
+    <label>Tipos de pregunta</label>
+    <div class="checkbox-lista">
+      {% for clave, etiqueta in tipos.items() %}
+      <label><input type="checkbox" name="tipos" value="{{ clave }}" {% if clave == 'opcion_multiple' or clave == 'verdadero_falso' %}checked{% endif %}> {{ etiqueta }}</label>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <button class="btn" type="submit">Generar preguntas con IA</button>
+</form>
+
+<script src="{{ url_for('static', filename='js/origen.js') }}"></script>
+{% endblock %}

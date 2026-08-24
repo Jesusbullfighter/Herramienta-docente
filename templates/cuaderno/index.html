@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block titulo %}Cuaderno de evaluación{% endblock %}
+{% block contenido %}
+<h1>Cuaderno de evaluación</h1>
+<p>Crea un cuaderno por curso/materia e importa en él las hojas de calificaciones que exportes
+del calificador de Moodle, una por cada evaluación (trimestre).</p>
+
+<div class="card">
+  <h2>Nuevo cuaderno</h2>
+  <form method="post" action="{{ url_for('cuaderno.crear') }}">
+    <label for="nombre">Nombre (curso y materia)</label>
+    <input type="text" id="nombre" name="nombre" placeholder="p.ej. 3º ESO B - Matemáticas" required>
+    <button class="btn" type="submit">Crear cuaderno</button>
+  </form>
+</div>
+
+<h2>Tus cuadernos</h2>
+{% if cuadernos %}
+<div class="grid-modulos">
+  {% for c in cuadernos %}
+  <a class="card card-link" href="{{ url_for('cuaderno.detalle', slug=c.slug) }}">
+    <h2>{{ c.nombre }}</h2>
+    <p>{{ c.num_evaluaciones }} evaluación(es) importada(s)</p>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<p>Todavía no has creado ningún cuaderno.</p>
+{% endif %}
+{% endblock %}

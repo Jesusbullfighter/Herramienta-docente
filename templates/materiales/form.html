@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block titulo %}Materiales interactivos{% endblock %}
+{% block contenido %}
+<h1>Generar material interactivo</h1>
+<p>Aporta el contenido de partida y la IA generará una lección interactiva que cubre la
+práctica totalidad de ese contenido, organizada en apartados con términos clave y 10 preguntas
+de autoevaluación por apartado (con el resultado visible al terminar cada uno), lista para
+descargar como paquete SCORM e importar en Moodle.</p>
+<p class="ayuda">El número de apartados se calcula automáticamente según la extensión del
+contenido (aprox. uno cada 300 palabras): un texto corto tendrá pocos apartados y un tema largo,
+diez o más. Con textos largos la generación puede tardar uno o dos minutos, ya que se genera
+cada apartado por separado.</p>
+
+<form class="card" method="post" action="{{ url_for('materiales.generar') }}" enctype="multipart/form-data">
+  <input type="hidden" name="origen" id="origen-seleccionado" value="texto">
+
+  <label>Origen del contenido</label>
+  <div class="tabs-origen">
+    <button type="button" data-origen="texto">Pegar texto</button>
+    <button type="button" data-origen="pdf">Subir PDF</button>
+    <button type="button" data-origen="docx">Subir Word</button>
+    <button type="button" data-origen="url">Desde una URL</button>
+  </div>
+
+  <div class="origen-panel" data-origen="texto">
+    <textarea name="texto" placeholder="Pega aquí el contenido (apuntes, extracto de un tema, artículo...)"></textarea>
+  </div>
+  <div class="origen-panel" data-origen="pdf">
+    <input type="file" name="archivo" accept=".pdf">
+    <p class="ayuda">Se extraerá el texto del PDF (debe tener texto seleccionable, no ser un escaneado).</p>
+  </div>
+  <div class="origen-panel" data-origen="docx">
+    <input type="file" name="archivo" accept=".docx">
+  </div>
+  <div class="origen-panel" data-origen="url">
+    <input type="url" name="url" placeholder="https://...">
+    <p class="ayuda">Se usará el contenido de esa página concreta que indiques.</p>
+  </div>
+
+  <fieldset>
+    <legend>Parámetros de la lección</legend>
+    <label for="nivel">Nivel educativo</label>
+    <input type="text" id="nivel" name="nivel" placeholder="p.ej. 3º ESO, 1º Bachillerato">
+
+    <label for="asignatura">Asignatura / tema</label>
+    <input type="text" id="asignatura" name="asignatura" placeholder="p.ej. Biología, La célula">
+  </fieldset>
+
+  <button class="btn" type="submit">Generar lección con IA</button>
+</form>
+
+<script src="{{ url_for('static', filename='js/origen.js') }}"></script>
+{% endblock %}

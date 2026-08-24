@@ -1,0 +1,185 @@
+:root {
+  --azul: #1d4e89;
+  --azul-claro: #eaf1fb;
+  --verde: #2e7d32;
+  --rojo: #c62828;
+  --gris: #555;
+  --fondo: #f7f9fc;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--fondo);
+  color: #222;
+  margin: 0;
+  padding: 0;
+  line-height: 1.55;
+}
+
+.lesson-header {
+  background: var(--azul);
+  color: white;
+  padding: 24px 32px;
+}
+
+.lesson-header h1 { margin: 0 0 8px 0; font-size: 1.6rem; }
+.lesson-header p { margin: 0; opacity: 0.9; }
+
+.lesson-progress {
+  height: 6px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 3px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+.lesson-progress-bar {
+  height: 100%;
+  background: #ffd54f;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.lesson-body {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  background: white;
+  border: 1px solid #cdd7e5;
+  color: var(--azul);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.tab-button.activa {
+  background: var(--azul);
+  color: white;
+  border-color: var(--azul);
+}
+.tab-button.completada::after {
+  content: " \2713";
+}
+
+.section-panel {
+  display: none;
+  background: white;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.section-panel.activa { display: block; }
+
+.section-panel h2 { color: var(--azul); margin-top: 0; }
+
+.terminos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 18px 0;
+}
+.flashcard {
+  perspective: 800px;
+  width: 220px;
+  height: 110px;
+  cursor: pointer;
+}
+.flashcard-inner {
+  position: relative;
+  width: 100%; height: 100%;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+}
+.flashcard.volteada .flashcard-inner { transform: rotateY(180deg); }
+.flashcard-cara {
+  position: absolute; width: 100%; height: 100%;
+  backface-visibility: hidden;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  font-size: 0.9rem;
+}
+.flashcard-frente { background: var(--azul-claro); color: var(--azul); font-weight: 600; }
+.flashcard-dorso { background: var(--azul); color: white; transform: rotateY(180deg); }
+
+.autoeval-bloque {
+  margin-top: 22px;
+  border-top: 1px dashed #cdd7e5;
+  padding-top: 18px;
+}
+.autoeval-bloque h3 { margin-top: 0; font-size: 1rem; color: var(--gris); }
+
+.pregunta-bloque {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eef2f8;
+}
+.pregunta-bloque:last-of-type { border-bottom: none; }
+.pregunta-texto { font-weight: 600; margin: 0 0 10px; }
+
+.resultado-apartado {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+.resultado-apartado.aprobado { background: #e5f5e6; color: var(--verde); }
+.resultado-apartado.suspenso { background: #fdecea; color: var(--rojo); }
+
+.opcion-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--azul-claro);
+  border: 1px solid #cdd7e5;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+.opcion-btn:hover { background: #dbe8fb; }
+.opcion-btn.correcta { background: #e5f5e6; border-color: var(--verde); color: var(--verde); }
+.opcion-btn.incorrecta { background: #fdecea; border-color: var(--rojo); color: var(--rojo); }
+.opcion-btn[disabled] { cursor: default; }
+
+.feedback-msg { margin-top: 10px; font-weight: 600; }
+.feedback-msg.correcta { color: var(--verde); }
+.feedback-msg.incorrecta { color: var(--rojo); }
+
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+.nav-btn {
+  background: var(--azul);
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+.nav-btn:disabled { opacity: 0.4; cursor: default; }
+
+.resumen-final {
+  background: white;
+  border-radius: 10px;
+  padding: 24px;
+  margin-top: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.resumen-final h2 { color: var(--verde); margin-top: 0; }

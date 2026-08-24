@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titulo %}Herramienta Docente{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block head %}{% endblock %}
+</head>
+<body>
+<header class="top">
+  <a href="{{ url_for('index') }}">Herramienta Docente</a>
+  <nav>
+    <a href="{{ url_for('materiales.formulario') }}">Materiales interactivos</a>
+    <a href="{{ url_for('cuestionarios.formulario') }}">Cuestionarios</a>
+    <a href="{{ url_for('cuaderno.listado') }}">Cuaderno de evaluación</a>
+  </nav>
+</header>
+<main>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for categoria, mensaje in messages %}
+        <div class="flash {{ categoria }}">{{ mensaje }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block contenido %}{% endblock %}
+</main>
+</body>
+</html>

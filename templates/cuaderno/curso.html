@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block titulo %}{{ meta.nombre }}{% endblock %}
+{% block contenido %}
+<h1>{{ meta.nombre }}</h1>
+<a class="btn secundario" href="{{ url_for('cuaderno.listado') }}">← Volver a mis cuadernos</a>
+
+<div class="card">
+  <h2>Importar evaluación</h2>
+  <p>Sube el archivo exportado del calificador de Moodle (Calificaciones → Exportar → Hoja de
+  cálculo Excel o Texto plano) correspondiente a una evaluación.</p>
+  <form method="post" action="{{ url_for('cuaderno.subir', slug=slug) }}" enctype="multipart/form-data">
+    <label for="label">Nombre de la evaluación</label>
+    <input type="text" id="label" name="label" placeholder="p.ej. 1ª Evaluación" required>
+
+    <label for="peso">Peso en la nota final</label>
+    <input type="text" id="peso" name="peso" value="1">
+    <p class="ayuda">Si todas las evaluaciones pesan igual, deja "1" en todas.</p>
+
+    <label for="archivo">Archivo exportado de Moodle (.xlsx o .csv)</label>
+    <input type="file" id="archivo" name="archivo" accept=".xlsx,.xls,.csv" required>
+
+    <button class="btn" type="submit">Importar</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Evaluaciones importadas</h2>
+  {% if meta.evaluaciones %}
+  <table>
+    <tr><th>Evaluación</th><th>Peso</th><th>Alumnos</th><th>Actividades</th><th></th></tr>
+    {% for ev in meta.evaluaciones %}
+    <tr>
+      <td>{{ ev.label }}</td>
+      <td>{{ ev.peso }}</td>
+      <td>{{ ev.num_alumnos }}</td>
+      <td>{{ ev.num_actividades }}</td>
+      <td>
+        <form method="post" action="{{ url_for('cuaderno.eliminar_evaluacion', slug=slug, eval_id=ev.id) }}" onsubmit="return confirm('¿Eliminar esta evaluación del cuaderno?');">
+          <button class="btn peligro" type="submit" style="margin-top:0;padding:5px 12px;font-size:0.85rem;">Eliminar</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p>Todavía no has importado ninguna evaluación.</p>
+  {% endif %}
+</div>
+
+{% if tabla.filas %}
+<div class="card">
+  <h2>Tabla del grupo</h2>
+  <a class="btn secundario" href="{{ url_for('cuaderno.exportar', slug=slug) }}">Descargar Excel</a>
+  <table>
+    <tr>
+      <th>Alumno</th>
+      {% for ev in tabla.evaluaciones %}<th>{{ ev.label }}</th>{% endfor %}
+      <th>Nota final</th>
+    </tr>
+    {% for fila in tabla.filas %}
+    <tr>
+      <td><a href="{{ url_for('cuaderno.alumno', slug=slug, student_key=fila.key) }}">{{ fila.nombre_completo }}</a></td>
+      {% for ev in tabla.evaluaciones %}
+      <td>{{ fila.por_evaluacion.get(ev.id, "—") }}</td>
+      {% endfor %}
+      <td class="stat-final {{ 'aprobado' if fila.final and fila.final >= 5 else 'suspenso' if fila.final is not none else '' }}">
+        {{ fila.final if fila.final is not none else "—" }}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+{% endblock %}
