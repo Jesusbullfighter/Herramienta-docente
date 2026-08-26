@@ -6,7 +6,6 @@ from services.ai_client import ask_ai_json
 TIPO_LABELS = {
     "opcion_multiple": "Opción múltiple (una respuesta correcta entre varias)",
     "verdadero_falso": "Verdadero o falso",
-    "respuesta_corta": "Respuesta corta (palabra o frase breve)",
     "completar": "Completar huecos (texto con espacios en blanco)",
     "emparejamiento": "Emparejamiento (relacionar dos columnas)",
 }
@@ -50,12 +49,6 @@ Devuelve un JSON con esta forma exacta (una lista de objetos "preguntas"):
       "tipo": "verdadero_falso",
       "enunciado": "afirmación a valorar",
       "correcta": true,
-      "retroalimentacion": "explicación breve"
-    }},
-    {{
-      "tipo": "respuesta_corta",
-      "enunciado": "pregunta que se responde con una palabra o frase corta",
-      "respuestas_aceptadas": ["respuesta principal", "sinónimo aceptado"],
       "retroalimentacion": "explicación breve"
     }},
     {{
@@ -138,12 +131,6 @@ def _normalize_question(q: dict, index: int) -> dict:
     elif tipo == "verdadero_falso":
         normalized["enunciado"] = q.get("enunciado", "")
         normalized["correcta"] = bool(q.get("correcta"))
-        normalized["retroalimentacion"] = q.get("retroalimentacion", "")
-
-    elif tipo == "respuesta_corta":
-        normalized["enunciado"] = q.get("enunciado", "")
-        respuestas = q.get("respuestas_aceptadas") or []
-        normalized["respuestas_aceptadas"] = [r for r in respuestas if str(r).strip()]
         normalized["retroalimentacion"] = q.get("retroalimentacion", "")
 
     elif tipo == "completar":

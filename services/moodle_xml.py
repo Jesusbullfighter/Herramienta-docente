@@ -64,30 +64,6 @@ def _question_truefalse(q: dict) -> str:
 </question>"""
 
 
-def _question_shortanswer(q: dict) -> str:
-    name = q["enunciado"][:80] or "Respuesta corta"
-    respuestas = q.get("respuestas_aceptadas") or [""]
-    feedback = q.get("retroalimentacion", "")
-    answers_xml = []
-    for r in respuestas:
-        answers_xml.append(
-            '<answer fraction="100" format="moodle_auto_format">'
-            f"<text>{_cdata(r)}</text>"
-            f"<feedback format=\"html\"><text>{_cdata(feedback)}</text></feedback>"
-            "</answer>"
-        )
-    return f"""
-<question type="shortanswer">
-  {_text_block('name', _strip_html(name))}
-  {_text_block('questiontext', q.get('enunciado', ''), 'html')}
-  <defaultgrade>1.0000000</defaultgrade>
-  <penalty>0.3333333</penalty>
-  <hidden>0</hidden>
-  <usecase>0</usecase>
-  {''.join(answers_xml)}
-</question>"""
-
-
 _HUECO_RE = re.compile(r"\{\{respuesta:(.*?)\}\}")
 
 
@@ -144,7 +120,6 @@ def _question_matching(q: dict) -> str:
 _BUILDERS = {
     "opcion_multiple": _question_multichoice,
     "verdadero_falso": _question_truefalse,
-    "respuesta_corta": _question_shortanswer,
     "completar": _question_cloze,
     "emparejamiento": _question_matching,
 }

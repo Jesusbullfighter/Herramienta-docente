@@ -22,7 +22,6 @@
     var etiquetas = {
       opcion_multiple: "Opción múltiple",
       verdadero_falso: "Verdadero o falso",
-      respuesta_corta: "Respuesta corta",
       completar: "Completar huecos",
       emparejamiento: "Emparejamiento",
     };
@@ -49,7 +48,6 @@
 
     if (p.tipo === "opcion_multiple") renderOpcionMultiple(card, p);
     else if (p.tipo === "verdadero_falso") renderVerdaderoFalso(card, p);
-    else if (p.tipo === "respuesta_corta") renderRespuestaCorta(card, p);
     else if (p.tipo === "completar") renderCompletar(card, p);
     else if (p.tipo === "emparejamiento") renderEmparejamiento(card, p);
 
@@ -138,18 +136,6 @@
     card.appendChild(campoTexto("Retroalimentación", p.retroalimentacion, function (v) { p.retroalimentacion = v; }));
   }
 
-  function renderRespuestaCorta(card, p) {
-    card.appendChild(campoTexto("Pregunta", p.enunciado, function (v) { p.enunciado = v; }, true));
-    card.appendChild(
-      campoTexto(
-        "Respuestas aceptadas (separadas por comas)",
-        (p.respuestas_aceptadas || []).join(", "),
-        function (v) { p.respuestas_aceptadas = v.split(",").map(function (s) { return s.trim(); }).filter(Boolean); }
-      )
-    );
-    card.appendChild(campoTexto("Retroalimentación", p.retroalimentacion, function (v) { p.retroalimentacion = v; }));
-  }
-
   function renderCompletar(card, p) {
     var wrap = campoTexto(
       "Texto con huecos — usa el formato {{respuesta:PALABRA}} para cada hueco",
@@ -208,9 +194,6 @@
     }
     if (tipo === "verdadero_falso") {
       return Object.assign(base, { enunciado: "", correcta: true, retroalimentacion: "" });
-    }
-    if (tipo === "respuesta_corta") {
-      return Object.assign(base, { enunciado: "", respuestas_aceptadas: [], retroalimentacion: "" });
     }
     if (tipo === "completar") {
       return Object.assign(base, { enunciado_con_huecos: "", retroalimentacion: "" });
